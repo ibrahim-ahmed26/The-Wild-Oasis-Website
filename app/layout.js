@@ -1,18 +1,30 @@
-import Logo from "./components/Logo";
-import Navigation from "./components/navigation";
-import "./globals.css";
+import Header from "@app/_components/Header";
+import "@app/_styles/globals.css";
+import { Josefin_Sans } from "next/font/google";
+const josefin = Josefin_Sans({
+  subsets: ["latin"],
+  display: "swap",
+});
 export const metadata = {
-  title: "The Wild Oasis",
+  title: {
+    template: "%s / The Wild Oasis",
+    default: "Welcome / The Wild Oasis",
+  },
+  description:
+    "The Wild Oasis is a luxury cabin booking app built with Next.js 14, React Server Components, and Supabase. Guests can explore cabins and make bookings, while staff manage reservations and guests from a secure dashboard.",
 };
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <header className="flex justify-between items-center p-2">
-          <Logo />
-          <Navigation></Navigation>
-        </header>
-        <main>{children}</main>
+      <body
+        className={` ${josefin.className} bg-primary-950 text-primary-100  min-h-dvh `}
+      >
+        <div className="flex flex-col  min-h-dvh">
+          <Header />
+          <div className="flex-1 px-4 py-4">
+            <main className="">{children}</main>
+          </div>
+        </div>
       </body>
     </html>
   );
