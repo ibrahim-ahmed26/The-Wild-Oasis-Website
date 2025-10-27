@@ -1,3 +1,16 @@
 {
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+
+  "vsicons.associations.files": [
+    {
+      "fileNames": [
+        "supabase.js",
+        "supabase.ts",
+        "supabaseClient.js",
+        "supabaseClient.ts"
+      ],
+      "icon": "supabase",
+      "format": "svg"
+    }
+  ]
 }
