@@ -10,9 +10,8 @@ export const metadata = {
 export default function Page() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12 lg:gap-x-24 lg:gap-y-32 text-base md:text-lg">
-      {/* First Section */}
       <div className="md:col-span-2 lg:col-span-3">
-        <h1 className="text-3xl md:text-4xl mb-8 md:mb-10 text-accent-400 font-medium">
+        <h1 className="text-3xl md:text-4xl animate-pulse mb-8 md:mb-10 text-accent-400 font-medium">
           Welcome to The Wild Oasis
         </h1>
 
@@ -48,8 +47,6 @@ export default function Page() {
           alt="Family sitting around a fire pit in front of cabin"
         />
       </div>
-
-      {/* Second Section */}
       <div className="md:col-span-2 lg:col-span-2 relative aspect-[4/3] md:aspect-square">
         <Image
           src={secondImage}

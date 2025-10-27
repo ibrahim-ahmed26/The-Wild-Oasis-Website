@@ -9,7 +9,7 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-4xl mb-5 text-accent-400 font-medium animate-bounce">
+      <h1 className="text-4xl mb-5 text-accent-400 font-medium animate-pulse">
         Our Luxury Cabins
       </h1>
       <p className="text-primary-200 text-lg mb-10">

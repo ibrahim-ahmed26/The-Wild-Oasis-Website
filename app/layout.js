@@ -21,8 +21,8 @@ export default function RootLayout({ children }) {
       >
         <div className="flex flex-col  min-h-dvh">
           <Header />
-          <div className="flex-1 px-4 py-4">
-            <main className="">{children}</main>
+          <div className="flex-1 px-4 py-4 grid">
+            <main className="w-full">{children}</main>
           </div>
         </div>
       </body>
