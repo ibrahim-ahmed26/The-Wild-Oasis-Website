@@ -101,7 +101,7 @@ export async function getBookedDatesByCabinId(cabinId) {
     .from("bookings")
     .select("*")
     .eq("cabinId", cabinId)
-    .or(`startDate.gte.${today},status.eq.checked-in`);
+    .or(`start-date.gte.${today},status.eq.checked-in`);
 
   if (error) {
     console.error(error);
@@ -128,7 +128,6 @@ export async function getSettings() {
     console.error(error);
     throw new Error("Settings could not be loaded");
   }
-
   return data;
 }
 
