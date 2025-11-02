@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import CabinList from "../_components/CabinList";
 import Loading from "./loading";
 import Filter from "../_components/Filter";
+import ReservationReminder from "../_components/ReservationReminder";
 export const revalidate = 3600;
 export const metadata = {
   title: "Cabins",
@@ -26,6 +27,7 @@ export default function Page({ searchParams }) {
           <Filter />
         </div>
         <CabinList filter={filter} />
+        <ReservationReminder />
       </Suspense>
     </div>
   );

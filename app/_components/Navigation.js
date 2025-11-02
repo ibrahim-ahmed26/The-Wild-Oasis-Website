@@ -5,7 +5,10 @@ import {
   BuildingOffice2Icon,
   HomeModernIcon,
 } from "@heroicons/react/24/outline";
-export default function Navigation() {
+import { auth } from "../_library/auth";
+import Image from "next/image";
+export default async function Navigation() {
+  const session = await auth();
   return (
     <nav className="z-10 text-xl">
       <ul className="decoration-none flex items-end justify-center gap-4 cursor-pointer">
@@ -40,13 +43,25 @@ export default function Navigation() {
           </Link>
         </li>
         <li>
-          <Link href="/account">
+          <Link href="/account" className="flex gap-4 items-center">
             <span className=" hidden md:inline hover:text-accent-400 transition-colors">
-              Account
+              Guest Area
             </span>
+
             <span className="hover:text-accent-400 transition-colors md:hidden">
               {<UserIcon className="w-5 h-5" />}
             </span>
+            {session ? (
+              <Image
+                src={session.user.image}
+                alt="Google Image"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+            ) : (
+              ""
+            )}
           </Link>
         </li>
       </ul>

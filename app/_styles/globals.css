@@ -29,10 +29,40 @@
   }
 }
 
-/* For data picker */
 .rdp {
-  --rdp-cell-size: 32px !important;
-  --rdp-accent-color: theme("colors.accent.500") !important;
-  --rdp-background-color: theme("colors.accent.600") !important;
-  margin: 0 !important;
+  --rdp-accent-color: theme("colors.accent.300") !important;
+  background-color: color !important;
+  color: inherit !important;
+}
+
+.rdp-caption_label,
+.rdp-button,
+.rdp-head_cell,
+.rdp-day {
+  color: inherit !important;
+}
+
+.rdp-dropdown_month,
+.rdp-dropdown_year {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.rdp-day_range_start,
+.rdp-day_range_end {
+  background-color: theme("colors.accent.900") !important;
+  color: white !important;
+  border-radius: 9999px !important;
+}
+
+.rdp-day_range_middle {
+  background-color: theme("colors.accent.500") !important;
+  color: white !important;
+}
+
+.rdp-day_selected:not(.rdp-day_range_start):not(.rdp-day_range_end):not(
+    .rdp-day_range_middle
+  ) {
+  background-color: theme("colors.accent.600") !important;
+  color: white !important;
 }

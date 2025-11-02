@@ -2,6 +2,7 @@
 import { isWithinInterval } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { useReservation } from "./ReservationsProvider";
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -19,14 +20,13 @@ function DateSelector({ settings, bookedDates }) {
   const discount = 23;
   const numNights = 23;
   const cabinPrice = 23;
-  const range = { from: null, to: null };
-
+  const { range, setRange, resetRange } = useReservation();
+  console.log("Current range:", range); // Add this to debug
   // SETTINGS
   const {
     "minimum-booking-length": minBookingLength,
     "max-booking-length": maxBookingLength,
   } = settings;
-  console.log(minBookingLength);
   return (
     <div className="flex flex-col items-center justify-between order-12 md:order-1 ">
       <DayPicker
@@ -36,15 +36,18 @@ function DateSelector({ settings, bookedDates }) {
           month: "lg:space-y-4",
         }}
         mode="range"
-        min={minBookingLength + 1}
+        disabled={bookedDates}
+        // min={minBookingLength + 1}
         max={maxBookingLength}
-        fromMonth={new Date()}
+        startMonth={new Date()}
+        animate
         fromDate={new Date()}
         toYear={new Date().getFullYear() + 5}
         captionLayout="dropdown"
         numberOfMonths={2}
+        onSelect={setRange}
+        selected={range}
       />
-
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
         <div className="flex items-baseline gap-6">
           <p className="flex gap-2 items-baseline">
@@ -73,14 +76,14 @@ function DateSelector({ settings, bookedDates }) {
           ) : null}
         </div>
 
-        {range.from || range.to ? (
+        {(range?.from || range?.to) && (
           <button
-            className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-            onClick={() => resetRange()}
+            className="border border-primary-800 rounded-lg ml-4 hover:text-accent-100 transition-colors py-2 px-4 text-sm font-semibold"
+            onClick={resetRange}
           >
             Clear
           </button>
-        ) : null}
+        )}
       </div>
     </div>
   );
