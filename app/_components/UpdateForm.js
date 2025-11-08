@@ -2,11 +2,26 @@
 
 import Image from "next/image";
 import { updateGuest } from "../_library/actions";
+import { useFormState, useFormStatus } from "react-dom";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
+const initialState = { success: null, message: null };
 export default function UpdateForm({ children, guest }) {
   const { full_name, email, national_id, country_flag: countryFlag } = guest;
+  const [state, formAction] = useFormState(updateGuest, initialState);
+  useEffect(
+    function () {
+      if (state.message) {
+        state.success
+          ? toast.success(state.message)
+          : toast.error("Profile Didn't Updated Correctly");
+      }
+    },
+    [state]
+  );
   return (
     <form
-      action={updateGuest}
+      action={formAction}
       className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"
     >
       <div className="space-y-2">
@@ -52,10 +67,20 @@ export default function UpdateForm({ children, guest }) {
       </div>
 
       <div className="flex justify-end items-center gap-6">
-        <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-          Update profile
-        </button>
+        <Button />
       </div>
     </form>
+  );
+}
+function Button() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      disabled={pending}
+      className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
+    >
+      {pending ? "Updating...." : "Update profile"}
+    </button>
   );
 }

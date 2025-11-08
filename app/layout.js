@@ -2,6 +2,7 @@ import Header from "@app/_components/Header";
 import "@app/_styles/globals.css";
 import { Josefin_Sans } from "next/font/google";
 import { ReservationsProvider } from "./_components/ReservationsProvider";
+import { Toaster } from "react-hot-toast";
 const josefin = Josefin_Sans({
   subsets: ["latin"],
   display: "swap",
@@ -28,6 +29,31 @@ export default function RootLayout({ children }) {
             </main>
           </div>
         </div>
+        <Toaster
+          position={"top-center"}
+          reverseOrder={false}
+          toastOptions={{
+            duration: 3000,
+            style: {
+              background: "#333",
+              color: "#fff",
+              borderRadius: "8px",
+              fontSize: "0.95rem",
+            },
+            success: {
+              iconTheme: {
+                primary: "#4ade80", // green-400
+                secondary: "#fff",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#f87171", // red-400
+                secondary: "#fff",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

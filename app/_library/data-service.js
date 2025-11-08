@@ -74,21 +74,34 @@ export async function getBooking(id) {
 }
 
 export async function getBookings(guestId) {
-  const { data, error, count } = await supabase
+  const { data, error } = await supabase
     .from("bookings")
-    // We actually also need data on the cabins as well. But let's ONLY take the data that we actually need, in order to reduce downloaded data.
-    .select(
-      "id, created_at, startDate, endDate, numNights, numGuests, totalPrice, guestId, cabinId, cabins(name, image)"
-    )
-    .eq("guestId", guestId)
-    .order("startDate");
-
+    // Fetch all fields (since hyphenated names break select)
+    .select("*, cabins(name, image)")
+    .eq("guestsId", guestId);
   if (error) {
     console.error(error);
-    throw new Error("Bookings could not get loaded");
+    throw new Error("Bookings could not be loaded");
   }
 
-  return data;
+  // Rename and sort in JS
+  const bookings = data
+    .map((row) => ({
+      id: row.id,
+      created_at: row.created_at,
+      start_date: row["start-date"],
+      end_date: row["end-date"],
+      num_nights: row["num-nights"],
+      num_guests: row["num-guests"],
+      total_price: row["total-price"],
+      guestId: row.guestId,
+      cabinId: row.cabinId,
+      cabins: row.cabins,
+    }))
+    // Sort manually by start_date
+    .sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+
+  return bookings;
 }
 
 export async function getBookedDatesByCabinId(cabinId) {

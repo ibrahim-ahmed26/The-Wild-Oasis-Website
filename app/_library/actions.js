@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import { supabase } from "./supabase";
+import { redirect } from "next/navigation";
 
 export async function SignIn() {
   await signIn("google", { redirectTo: "/account" });
@@ -11,7 +12,7 @@ export async function SignOut() {
   await signOut({ redirectTo: "/" });
 }
 
-export async function updateGuest(formData) {
+export async function updateGuest(prevState, formData) {
   const session = await auth();
   if (!session) throw new Error("User Must Be Signed In First");
   const nationalID = formData.get("national_id");
@@ -29,7 +30,55 @@ export async function updateGuest(formData) {
     .eq("id", session.user.guestId);
 
   if (error) {
-    throw new Error("Guest could not be updated");
+    return { error: false, message: "Guest could not be updated" };
   }
   revalidatePath("/account/profile");
+  return { success: true, message: "Profile Updated Successfully" };
+}
+export async function deleteReservation(bookingId) {
+  const session = await auth();
+  if (!session) throw new Error("User Must Sign In first");
+
+  const { error } = await supabase
+    .from("bookings")
+    .delete()
+    .eq("id", bookingId)
+    //only for deleting own reservations
+    .eq("guestsId", session.user.guestId);
+
+  if (error) throw new Error("Booking could not be deleted");
+  revalidatePath("/account/reservations");
+}
+export async function getSingleBooking(reservationId) {
+  const session = await auth();
+  if (!session) throw new Error("User Must Sign In first");
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, cabins( max-capacity)")
+    .eq("id", reservationId)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Booking could not get loaded");
+  }
+  return data;
+}
+export async function updateReservation(formData) {
+  const session = await auth();
+  if (!session) throw new Error("User Must Sign In first");
+  const reservationId = formData.get("reservationId");
+  const numGuests = formData.get("numGuests");
+  const observations = formData.get("observations");
+  const updatedFields = { "num-guests": numGuests, observations };
+  const { error } = await supabase
+    .from("bookings")
+    .update(updatedFields)
+    .eq("id", reservationId)
+    .single();
+  if (error) {
+    throw new Error("Booking could not get loaded");
+  }
+  revalidatePath(`account/reservations/${reservationId}`);
+  redirect("/account/reservations");
 }
