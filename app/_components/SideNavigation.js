@@ -31,7 +31,7 @@ function SideNavigation() {
   return (
     <nav
       className="
-        fixed bottom-0 left-0 right-0 border-t border-primary-900
+        fixed bottom-0 left-0 right-0 border-t border-primary-900 
         md:static md:border-t-0 md:border-r 
       "
     >

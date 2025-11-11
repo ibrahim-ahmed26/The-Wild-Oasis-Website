@@ -11,7 +11,7 @@ export default async function Navigation() {
   const session = await auth();
   return (
     <nav className="z-10 text-xl">
-      <ul className="decoration-none flex items-end justify-center gap-4 cursor-pointer">
+      <ul className="decoration-none mt-5 md:mt-0 flex items-end justify-center gap-4 cursor-pointer">
         <li>
           <Link href="/">
             <span className="hidden md:inline hover:text-accent-400 transition-colors">

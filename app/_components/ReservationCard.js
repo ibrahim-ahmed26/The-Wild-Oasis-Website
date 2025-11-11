@@ -9,7 +9,7 @@ export const formatDistanceFromNow = (dateStr) =>
     addSuffix: true,
   }).replace("about ", "");
 
-function ReservationCard({ booking }) {
+function ReservationCard({ booking, handleDelete }) {
   const {
     id,
     start_date: startDate,
@@ -21,6 +21,7 @@ function ReservationCard({ booking }) {
     created_at,
     cabins: { name, image },
   } = booking;
+
   return (
     <div className="flex border flex-col md:flex-row border-primary-800">
       <div className="relative h-32 aspect-square">
@@ -37,7 +38,7 @@ function ReservationCard({ booking }) {
           <h3 className="text-xl font-semibold">
             {numNights} nights in Cabin {name}
           </h3>
-          {isPast(new Date(startDate)) ? (
+          {isPast(new Date(endDate)) ? (
             <span className="bg-yellow-800 text-yellow-200 h-7 px-3 uppercase text-xs font-bold flex items-center rounded-sm">
               past
             </span>
@@ -68,7 +69,7 @@ function ReservationCard({ booking }) {
         </div>
       </div>
 
-      {!isPast(new Date(endDate)) && (
+      {!isPast(new Date(endDate)) ? (
         <div className="flex flex-row md:flex-col px-4 py-4 md:px-0 md:py-0 md:border-l border-primary-800 w-[100px]">
           <Link
             href={`/account/reservations/${id}`}
@@ -77,9 +78,9 @@ function ReservationCard({ booking }) {
             <PencilSquareIcon className="h-5 w-5 text-primary-600 group-hover:text-primary-800 transition-colors" />
             <span className="mt-1">Edit</span>
           </Link>
-          <DeleteReservation bookingId={id} />
+          <DeleteReservation bookingId={id} handleDelete={handleDelete} />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
