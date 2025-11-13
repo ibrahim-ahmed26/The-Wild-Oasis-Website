@@ -42,11 +42,40 @@ export async function deleteReservation(bookingId) {
     .from("bookings")
     .delete()
     .eq("id", bookingId)
-    //only for deleting own reservations
     .eq("guestsId", session.user.guestId);
 
   if (error) throw new Error("Booking could not be deleted");
   revalidatePath("/account/reservations");
+}
+export async function createBooking(addtionalData, formData) {
+  const session = await auth();
+  if (!session) throw new Error("User Must Sign In first");
+  const { startDate, endDate, numNights, cabinPrice, cabinId } = addtionalData;
+  const numGuests = formData.get("numGuests");
+  const observations = formData.get("observations");
+  const guestId = session.user.guestId;
+  const newBooking = {
+    "start-date": startDate,
+    "end-date": endDate,
+    "num-nights": numNights,
+    "total-price": cabinPrice,
+    "cabin-price": cabinPrice,
+    "extras-price": 0,
+    status: "unconfirmed",
+    "has-breakfast": false,
+    "is-paid": false,
+    observations,
+    cabinId,
+    "num-guests": Number(numGuests),
+    guestsId: guestId,
+  };
+  console.log(newBooking);
+  const { error } = await supabase.from("bookings").insert([newBooking]);
+
+  if (error) {
+    throw new Error("Booking could not be created");
+  }
+  revalidatePath(`/cabins/${cabinId}`);
 }
 export async function getSingleBooking(reservationId) {
   const session = await auth();
