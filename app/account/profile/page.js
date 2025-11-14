@@ -2,9 +2,11 @@ import SelectCountry from "@/app/_components/SelectCountry";
 import UpdateForm from "@/app/_components/UpdateForm";
 import { auth } from "@/app/_library/auth";
 import { getGuest } from "@/app/_library/data-service";
+
 export const metadata = {
   title: "Update Profile",
 };
+
 export default async function Page() {
   const session = await auth();
 
@@ -20,7 +22,8 @@ export default async function Page() {
     return <p className="text-red-500">Guest profile not found.</p>;
   }
 
-  const { nationality } = guest;
+  // Safely destructure with a default value
+  const { nationality = "" } = guest;
 
   return (
     <div>
@@ -38,7 +41,7 @@ export default async function Page() {
           name="nationality"
           id="nationality"
           className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-          defaultCountry={nationality}
+          defaultCountry={nationality || ""}
         />
       </UpdateForm>
     </div>

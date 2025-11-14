@@ -5,10 +5,14 @@ import { updateGuest } from "../_library/actions";
 import { useFormState, useFormStatus } from "react-dom";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
+
 const initialState = { success: null, message: null };
+
 export default function UpdateForm({ children, guest }) {
   const { full_name, email, national_id, country_flag: countryFlag } = guest;
+
   const [state, formAction] = useFormState(updateGuest, initialState);
+
   useEffect(
     function () {
       if (state.message) {
@@ -19,6 +23,7 @@ export default function UpdateForm({ children, guest }) {
     },
     [state]
   );
+
   return (
     <form
       action={formAction}
@@ -47,22 +52,26 @@ export default function UpdateForm({ children, guest }) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label htmlFor="nationality">Where are you from?</label>
-          <Image
-            src={countryFlag}
-            width={40}
-            height={40}
-            alt="Country flag"
-            className="h-5 rounded-sm"
-          />
+          {countryFlag && (
+            <Image
+              src={countryFlag}
+              width={40}
+              height={40}
+              alt="Country flag"
+              className="h-5 rounded-sm"
+            />
+          )}
         </div>
       </div>
+
       {children}
+
       <div className="space-y-2">
         <label htmlFor="nationalID">National ID number</label>
         <input
-          defaultValue={national_id}
+          defaultValue={national_id || ""}
           name="national_id"
-          className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
+          className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm"
         />
       </div>
 
@@ -72,6 +81,7 @@ export default function UpdateForm({ children, guest }) {
     </form>
   );
 }
+
 function Button() {
   const { pending } = useFormStatus();
 
