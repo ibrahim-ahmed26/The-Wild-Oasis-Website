@@ -7,7 +7,19 @@ export const metadata = {
 };
 export default async function Page() {
   const session = await auth();
+
+  if (!session?.user?.email) {
+    return (
+      <p className="text-red-500">You must be logged in to access this page.</p>
+    );
+  }
+
   const guest = await getGuest(session.user.email);
+
+  if (!guest) {
+    return <p className="text-red-500">Guest profile not found.</p>;
+  }
+
   const { nationality } = guest;
 
   return (
@@ -20,6 +32,7 @@ export default async function Page() {
         Providing the following information will make your check-in process
         faster and smoother. See you soon!
       </p>
+
       <UpdateForm guest={guest}>
         <SelectCountry
           name="nationality"
