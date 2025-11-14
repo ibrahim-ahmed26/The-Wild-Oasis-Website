@@ -26,7 +26,6 @@ function isAlreadyBooked(range, datesArr) {
 
 function DateSelector({ settings, cabin, bookedDates }) {
   const { range, setRange, resetRange } = useReservation();
-
   // Normalize booked dates - convert strings to Date objects and strip time
   const normalizedBookedDates = useMemo(() => {
     if (!bookedDates?.length) return [];
@@ -156,6 +155,7 @@ function DateSelector({ settings, cabin, bookedDates }) {
         captionLayout="dropdown"
         numberOfMonths={2}
         disabled={isDateDisabled}
+        animate
       />
 
       {/* Price summary section */}

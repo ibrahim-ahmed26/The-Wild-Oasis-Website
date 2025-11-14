@@ -4,8 +4,8 @@ import DeleteReservation from "./DeleteReservation";
 import Image from "next/image";
 import Link from "next/link";
 
-export const formatDistanceFromNow = (dateStr) =>
-  formatDistance(parseISO(dateStr), new Date(), {
+export const formatDistanceFromNow = (date) =>
+  formatDistance(date, new Date(), {
     addSuffix: true,
   }).replace("about ", "");
 
@@ -21,7 +21,15 @@ function ReservationCard({ booking, handleDelete }) {
     created_at,
     cabins: { name, image },
   } = booking;
+  function toDate(value) {
+    if (value instanceof Date) return value;
+    if (typeof value === "string") return parseISO(value);
+    return new Date(value);
+  }
 
+  const start = toDate(startDate);
+  const end = toDate(endDate);
+  const created = toDate(created_at);
   return (
     <div className="flex border flex-col md:flex-row border-primary-800">
       <div className="relative h-32 aspect-square">
@@ -50,11 +58,9 @@ function ReservationCard({ booking, handleDelete }) {
         </div>
 
         <p className="text-lg text-primary-300">
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+          {format(start, "EEE, MMM dd yyyy")} (
+          {isToday(start) ? "Today" : formatDistanceFromNow(start)}) &mdash;{" "}
+          {format(end, "EEE, MMM dd yyyy")}
         </p>
 
         <div className="flex gap-5 mt-auto items-baseline">
